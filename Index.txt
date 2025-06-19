@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>ระบบฟอร์ม | เว็บไซต์ของเรา</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      display: flex;
+      height: 100vh;
+    }
+
+    header {
+      background-color: #34495e;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 95%;
+    }
+
+    .site-title {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .menu-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .menu-button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .menu-button:hover {
+      background-color: #2980b9;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #ecf0f1;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 30px;
+      background-color: #f9f9f9;
+      position: relative;
+    }
+
+    select {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"], .back-home-button {
+      margin-top: 15px;
+      background-color: #2ecc71;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .back-home-button {
+      background-color: white;
+      color: black;
+      border: 2px solid red;
+      float: right;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .popup-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h3>เลือกฟอร์ม</h3>
+    <select id="formSelector" onchange="showForm()">
+      <option value="enroll">ฟอร์มใบสมัครเรียน</option>
+      <option value="withdraw">ฟอร์มใบเบิกเงิน</option>
+      <option value="resign">ฟอร์มใบลาออก</option>
+    </select>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <div class="site-title">ระบบฟอร์มอิเล็กทรอนิกส์</div>
+      <div class="menu-buttons">
+        <a href="about.html" class="menu-button">เกี่ยวกับเรา</a>
+        <a href="contact.html" class="menu-button">ติดต่อ</a>
+      </div>
+    </header>
+
+    <!-- ฟอร์มใบสมัครเรียน -->
+    <div id="enrollForm">
+      <h2>ฟอร์มใบสมัครเรียน</h2>
+      <form id="enrollRealForm" onsubmit="event.preventDefault(); openPopup('enroll');">
+        <label>ชื่อ - นามสกุล</label>
+        <input type="text" id="enrollName" required>
+
+        <label>เลขประจำตัวประชาชน</label>
+        <input type="text" id="enrollId" required>
+
+        <label>เบอร์โทรศัพท์</label>
+        <input type="tel" id="enrollPhone" required>
+
+        <label>หลักสูตรที่สมัคร</label>
+        <input type="text" id="enrollCourse" required>
+
+        <label>ที่อยู่</label>
+        <textarea id="enrollAddress" rows="3"></textarea>
+
+        <button type="submit">ส่งใบสมัคร</button>
+      </form>
+    </div>
+
+    <!-- ฟอร์มใบเบิกเงิน -->
+    <div id="withdrawForm" style="display:none;">
+      <h2>ฟอร์มใบเบิกเงิน</h2>
+      <form id="withdrawRealForm" onsubmit="event.preventDefault(); openPopup('withdraw');">
+        <label>ชื่อผู้เบิก</label>
+        <input type="text" id="withdrawName" required>
+
+        <label>จำนวนเงิน</label>
+        <input type="number" id="withdrawAmount" required>
+
+        <label>เหตุผลในการเบิก</label>
+        <textarea id="withdrawReason" rows="3" required></textarea>
+
+        <button type="submit">ส่งคำขอเบิก</button>
+      </form>
+    </div>
+
+    <!-- ฟอร์มใบลาออก -->
+    <div id="resignForm" style="display:none;">
+      <h2>ฟอร์มใบลาออก (ยังไม่พร้อมใช้งาน)</h2>
+    </div>
+  </div>
+
+  <!-- Popup Box -->
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <p>ผู้กรอกข้อมูลนี้ยืนยันว่าข้อมูลครบและถูกต้อง</p>
+      <div class="popup-buttons">
+        <button onclick="confirmForm(true)">ใช่</button>
+        <button onclick="confirmForm(false)">ไม่</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentFormType = null;
+
+    function showForm() {
+      const value = document.getElementById("formSelector").value;
+      document.getElementById("enrollForm").style.display = "none";
+      document.getElementById("withdrawForm").style.display = "none";
+      document.getElementById("resignForm").style.display = "none";
+
+      if (value === "enroll") document.getElementById("enrollForm").style.display = "block";
+      else if (value === "withdraw") document.getElementById("withdrawForm").style.display = "block";
+      else if (value === "resign") document.getElementById("resignForm").style.display = "block";
+    }
+
+    function openPopup(formType) {
+      currentFormType = formType;
+
+      if (formType === "enroll") {
+        const data = {
+          name: document.getElementById("enrollName").value,
+          id: document.getElementById("enrollId").value,
+          phone: document.getElementById("enrollPhone").value,
+          course: document.getElementById("enrollCourse").value,
+          address: document.getElementById("enrollAddress").value
+        };
+        localStorage.setItem("enrollData", JSON.stringify(data));
+      } else if (formType === "withdraw") {
+        const data = {
+          name: document.getElementById("withdrawName").value,
+          amount: document.getElementById("withdrawAmount").value,
+          reason: document.getElementById("withdrawReason").value
+        };
+        localStorage.setItem("withdrawData", JSON.stringify(data));
+      }
+
+      document.getElementById("popup").style.display = "flex";
+    }
+
+    function confirmForm(confirm) {
+      document.getElementById("popup").style.display = "none";
+      if (confirm) {
+        if (currentFormType === "enroll") {
+          window.location.href = "confirm.html";
+        } else if (currentFormType === "withdraw") {
+          window.location.href = "confirm-withdraw.html";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
