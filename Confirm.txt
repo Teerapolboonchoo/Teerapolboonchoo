@@ -1,97 +1,59 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <title>ตรวจสอบข้อมูลใบสมัครเรียน</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 700px;
-      margin: 30px auto;
-      background: #f9f9f9;
-      padding: 20px;
-    }
-    h2 {
-      color: #34495e;
-    }
-    .info-box {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #ccc;
-      margin-top: 20px;
-    }
-    .info-box p {
-      font-size: 16px;
-      margin: 10px 0;
-    }
-    .buttons {
-      margin-top: 30px;
-      display: flex;
-      gap: 15px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-    }
-    #confirmBtn {
-      background-color: #2ecc71;
-      color: white;
-    }
-    #editBtn {
-      background-color: #e67e22;
-      color: white;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>ตรวจสอบข้อมูลใบสมัคร</title>
+  <link rel="stylesheet" href="confirm-style.css">
 </head>
 <body>
 
-  <h2>ตรวจสอบข้อมูลใบสมัครเรียน</h2>
-  <div class="info-box" id="infoBox">
-    <!-- ข้อมูลจะแสดงที่นี่ -->
-  </div>
+  <div class="container">
+    <h2>ตรวจสอบข้อมูลก่อนยืนยัน</h2>
 
-  <div class="button-group">
-    <button class="button confirm-btn" onclick="confirmSubmit()">Print</button>
-  <button class="button edit-btn" onclick="goBack()">ยืนยัน</button>
+    <div class="info-box" id="infoBox">
+      <!-- จะถูกเติมข้อมูลจาก JavaScript -->
+    </div>
+
+    <div class="button-group no-print">
+      <button class="button confirm-btn" onclick="confirmSubmit()">ยืนยัน</button>
+      <button class="button edit-btn" onclick="goBack()">แก้ไข</button>
+      <button class="button print-btn" onclick="goToPrintTemplate()">Print</button>
+    </div>
   </div>
 
   <script>
-    function confirmSubmit() {
-    window.print(); // เปิดหน้าพิมพ์
-  }
+    const dataList = JSON.parse(localStorage.getItem("enrollData") || "[]");
+    const infoBox = document.getElementById("infoBox");
 
-    function goBack() {
-    window.history.back();
-  }
-    // โหลดข้อมูลจาก localStorage
-    const data = JSON.parse(localStorage.getItem('enrollData'));
-    const infoBox = document.getElementById('infoBox');
-
-    if (!data) {
+    if (!dataList || dataList.length === 0) {
       infoBox.innerHTML = '<p>ไม่พบข้อมูลใบสมัคร กรุณากรอกฟอร์มใหม่</p>';
     } else {
+      const data = dataList[0]; // แสดงแค่ชุดแรก
+
       infoBox.innerHTML = `
         <p><strong>ชื่อ - นามสกุล:</strong> ${data.name}</p>
-        <p><strong>เลขประจำตัวประชาชน:</strong> ${data.id}</p>
-        <p><strong>เบอร์โทรศัพท์:</strong> ${data.phone}</p>
-        <p><strong>หลักสูตรที่สมัคร:</strong> ${data.course}</p>
+        <p><strong>เลขบัตรประชาชน:</strong> ${data.id}</p>
+        <p><strong>เบอร์โทร:</strong> ${data.phone}</p>
+        <p><strong>หลักสูตร:</strong> ${data.course}</p>
+        <p><strong>เกรดเฉลี่ยสะสม (GPA):</strong> ${data.gpa}</p>
+        <p><strong>สาขาสถานศึกษาเดิม/กวดวิชาเดิม:</strong> ${data.major}</p>
+        <p><strong>สถานศึกษาเดิม:</strong> ${data.prevSchool}</p>
         <p><strong>ที่อยู่:</strong> ${data.address}</p>
       `;
     }
 
-    document.getElementById('confirmBtn').addEventListener('click', () => {
-      alert('ส่งข้อมูลเรียบร้อยแล้ว ขอบคุณค่ะ');
-      localStorage.removeItem('enrollData');
-      window.location.href = 'index.html';
-    });
+    function confirmSubmit() {
+      alert("ส่งข้อมูลเรียบร้อยแล้ว ขอบคุณค่ะ");
+      window.location.href = "index.html";
+    }
 
-    document.getElementById('editBtn').addEventListener('click', () => {
-      window.location.href = 'index.html';
-    });
+    function goBack() {
+      window.history.back();
+    }
+
+    function goToPrintTemplate() {
+      window.location.href = "confirm-template.html";
+    }
   </script>
 
 </body>
