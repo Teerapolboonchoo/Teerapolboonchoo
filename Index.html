@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ระบบฟอร์ม | เว็บไซต์ของเรา</title>
+  <link rel="stylesheet" href="CSS/index-style.css">
+</head>
+<body>
+<!-- ส่วน Sidebar และ Main-content ยังเหมือนเดิม -->
+<div class="sidebar">
+  <h3>เลือกฟอร์ม</h3>
+  <select id="formSelector" onchange="showForm()">
+    <option value="enroll">ฟอร์มใบสมัครเรียน</option>
+    <option value="withdraw">ฟอร์มใบเบิกเงิน</option>
+    <option value="resign">ฟอร์มใบลาออก</option>
+  </select>
+</div>
+
+<div class="main-content">
+  <header>
+    <div class="site-title">ระบบฟอร์มอิเล็กทรอนิกส์</div>
+    <div class="menu-buttons">
+      <a href="about.html" class="menu-button">เกี่ยวกับเรา</a>
+      <a href="contact.html" class="menu-button">ติดต่อ</a>
+      <a href="Homepage.html" class="menu-button">หน้าแรก</a>
+    </div>
+  </header>
+
+  <!-- ฟอร์มใบสมัครเรียน -->
+  <div id="enrollForm">
+    <h2>ฟอร์มใบสมัครเรียน</h2>
+    <form id="enrollRealForm" onsubmit="submitForm(event)">
+      <label>ชื่อ - นามสกุล</label>
+      <input type="text" name="name" required>
+
+      <label>เลขประจำตัวประชาชน</label>
+      <input type="text" name="id" required>
+
+      <label>เบอร์โทรศัพท์</label>
+      <input type="tel" name="phone" required>
+
+      <label>หลักสูตรที่สมัคร</label>
+      <input type="text" name="course" required>
+
+      <label>เกรดเฉลี่ยสะสม (GPA)</label>
+      <input type="text" id="gpa" required>
+
+      <label>สาขาสถานศึกษาเดิม/กวดวิชาเดิม:</label>
+      <input type="text" id="major" required>
+
+      <label>สถานศึกษาเดิม</label>
+      <input type="text" id="prevSchool" required>
+
+      <label>ที่อยู่</label>
+      <textarea name="address" rows="3" required></textarea>
+
+      <button type="submit">ส่งใบสมัคร</button>
+    </form>
+  </div>
+
+  <!-- ฟอร์มใบเบิกเงิน -->
+  <div id="withdrawForm" style="display:none;">
+    <h2>ฟอร์มใบเบิกเงิน</h2>
+    <form onsubmit="event.preventDefault(); openPopup();">
+      <label>ชื่อผู้เบิก</label>
+      <input type="text">
+
+      <label>จำนวนเงิน</label>
+      <input type="number">
+
+      <label>เหตุผลในการเบิก</label>
+      <textarea rows="3"></textarea>
+
+      <button type="submit">ส่งคำขอเบิก</button>
+    </form>
+  </div>
+
+  <!-- ฟอร์มใบลาออก -->
+  <div id="resignForm" style="display:none;">
+    <h2>ฟอร์มใบลาออก (ยังไม่พร้อมใช้งาน)</h2>
+  </div>
+</div>
+  <!-- Popup Box -->
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <p>ผู้กรอกข้อมูลนี้ยืนยันว่าข้อมูลครบและถูกต้อง</p>
+      <div class="popup-buttons">
+        <button onclick="confirmForm(true)">ใช่</button>
+        <button onclick="confirmForm(false)">ไม่</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Section -->
+  <script>
+  function showForm() {
+    const value = document.getElementById("formSelector").value;
+    document.getElementById("enrollForm").style.display = "none";
+    document.getElementById("withdrawForm").style.display = "none";
+    document.getElementById("resignForm").style.display = "none";
+    if (value === "enroll") document.getElementById("enrollForm").style.display = "block";
+    else if (value === "withdraw") document.getElementById("withdrawForm").style.display = "block";
+    else if (value === "resign") document.getElementById("resignForm").style.display = "block";
+  }
+
+  function submitForm(event) {
+    event.preventDefault();
+    document.getElementById("popup").style.display = "flex";
+  }
+
+  function confirmForm(confirm) {
+    document.getElementById("popup").style.display = "none";
+    if (confirm) {
+      const form = document.getElementById("enrollRealForm");
+      const newData = {
+        name: form.name.value,
+        id: form.id.value,
+        phone: form.phone.value,
+        course: form.course.value,
+        address: form.address.value,
+        gpa: document.getElementById("gpa").value,
+        major: document.getElementById("major").value,
+        prevSchool: document.getElementById("prevSchool").value
+      };
+
+      let enrollData = JSON.parse(localStorage.getItem("enrollData") || "[]");
+      enrollData.push(newData);
+      localStorage.setItem("enrollData", JSON.stringify(enrollData));
+
+      window.location.href = "confirm.html";
+    }
+  }
+
+  // ✅ เพิ่มฟังก์ชันนี้เข้าไปต่อท้าย (ไม่ลบโค้ดคุณ)
+  window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const formType = urlParams.get('form');
+    if (formType === 'enroll' || formType === 'withdraw' || formType === 'resign') {
+      document.getElementById('formSelector').value = formType;
+      showForm();
+    } else {
+      showForm(); // fallback แสดง enroll เป็นค่าเริ่มต้น
+    }
+  };
+</script>
+
+
+</body>
+</html>

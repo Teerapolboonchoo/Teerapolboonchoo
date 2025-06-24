@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ใบสมัครเข้าศึกษา | พิมพ์เอกสาร</title>
+  <link rel="stylesheet" href="CSS/template-style.css">
+</head>
+<body>
+  <div class="print-container">
+    <div class="header">
+      <p style="text-align: right;">สมัคร วันที่ ............/............./................</p>
+      <img src="Photos/Logo.png" alt="โลโก้" class="logo">
+      <h2>ใบสมัครเข้าศึกษา วิทยาลัยเทคนิคมหาสารคาม</h2>
+      <p>เปิดรับสมัครนักศึกษา ประจำปี 2569</p>
+      <hr>
+    </div>
+
+    <div class="form-content" id="formContent">
+      <!-- เนื้อหาจะเติมผ่าน JavaScript -->
+    </div>
+
+    <div class="signature">
+      <p>ข้าพเจ้ายินยอมว่าสำเนาหลักฐานและข้อมูลในใบสมัครนี้เป็นความจริงทุกประการ และยินยอมรับผลการพิจารณาทุกประการ</p>
+      <p>ลงชื่อ ............................................. ผู้สมัคร</p>
+      <p>( ............................................. )</p>
+      <p>วันที่ ............/............./................</p>
+    </div>
+
+    <div class="footer">
+      <hr>
+      <p>กรุณานำใบสมัครและหลักฐานกลับมายื่นสมัครที่สถานศึกษา</p>
+    </div>
+
+    <div class="print-controls no-print">
+      <button onclick="window.print()">พิมพ์</button>
+      <button onclick="window.location.href='index.html'">กลับหน้าหลัก</button>
+    </div>
+  </div>
+
+  <script>
+    const dataList = JSON.parse(localStorage.getItem("enrollData") || "[]");
+    const latest = dataList[dataList.length - 1];
+
+    const form = document.getElementById("formContent");
+
+    if (!latest) {
+      form.innerHTML = "<p style='color:red;'>ไม่พบข้อมูลสำหรับพิมพ์</p>";
+    } else {
+      form.innerHTML = `
+        <p><strong>ชื่อผู้สมัคร:</strong> ${latest.name}</p>
+        <p><strong>เลขบัตรประชาชน:</strong> ${latest.id}</p>
+        <p><strong>เบอร์โทร:</strong> ${latest.phone}</p>
+        <p><strong>หลักสูตร:</strong> ${latest.course}</p>
+        <p><strong>เกรดเฉลี่ยสะสม (GPA):</strong> ${latest.gpa}</p>
+        <p><strong>สาขาสถานศึกษาเดิม/กวดวิชาเดิม:</strong> ${latest.major}</p>
+        <p><strong>สถานศึกษาเดิม:</strong> ${latest.prevSchool}</p>   
+        <p><strong>ที่อยู่:</strong> ${latest.address}</p>
+      `;
+    }
+
+    window.onload = function () {
+  const enrollData = JSON.parse(localStorage.getItem("enrollData") || "[]");
+  const index = enrollData.length;
+  document.title = `ใบสมัครเรียน RPA ${index}`; // ← ชื่อจะถูกใช้เป็น Default ตอน Save
+  window.print();
+};
+  </script>
+</body>
+</html>

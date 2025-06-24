@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ตรวจสอบข้อมูลใบสมัคร</title>
+  <link rel="stylesheet" href="CSS/confirm-style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>ตรวจสอบข้อมูลก่อนยืนยัน</h2>
+
+    <div class="info-box" id="infoBox">
+      <!-- จะถูกเติมข้อมูลจาก JavaScript -->
+    </div>
+
+    <div class="button-group no-print">
+      <button class="button confirm-btn" onclick="confirmSubmit()">ยืนยัน</button>
+      <button class="button edit-btn" onclick="goBack()">แก้ไข</button>
+      <button class="button print-btn" onclick="goToPrintTemplate()">Print</button>
+    </div>
+  </div>
+
+  <script>
+  const dataList = JSON.parse(localStorage.getItem("enrollData") || "[]");
+  const infoBox = document.getElementById("infoBox");
+
+  if (!dataList || dataList.length === 0) {
+    infoBox.innerHTML = '<p>ไม่พบข้อมูลใบสมัคร กรุณากรอกฟอร์มใหม่</p>';
+  } else {
+    const data = dataList[dataList.length - 1]; // ❗ ใช้รายการล่าสุดที่ส่งมา
+
+    infoBox.innerHTML = `
+      <p><strong>ชื่อ - นามสกุล:</strong> ${data.name}</p>
+      <p><strong>เลขบัตรประชาชน:</strong> ${data.id}</p>
+      <p><strong>เบอร์โทร:</strong> ${data.phone}</p>
+      <p><strong>หลักสูตร:</strong> ${data.course}</p>
+      <p><strong>เกรดเฉลี่ยสะสม (GPA):</strong> ${data.gpa}</p>
+      <p><strong>สาขาสถานศึกษาเดิม/กวดวิชาเดิม:</strong> ${data.major}</p>
+      <p><strong>สถานศึกษาเดิม:</strong> ${data.prevSchool}</p>
+      <p><strong>ที่อยู่:</strong> ${data.address}</p>
+    `;
+  }
+
+  function confirmSubmit() {
+    alert("ส่งข้อมูลเรียบร้อยแล้ว ขอบคุณค่ะ");
+    window.location.href = "index.html";
+  }
+
+  function goBack() {
+    window.history.back();
+  }
+
+  function goToPrintTemplate() {
+    window.location.href = "confirm-template.html";
+  }
+</script>
+
+
+</body>
+</html>

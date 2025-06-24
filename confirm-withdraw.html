@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>ตรวจสอบข้อมูลคำขอเบิกเงิน</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 30px auto;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    h2 {
+      color: #34495e;
+    }
+    .info-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+      margin-top: 20px;
+    }
+    .info-box p {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      gap: 15px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+    #confirmBtn {
+      background-color: #2ecc71;
+      color: white;
+    }
+    #editBtn {
+      background-color: #e67e22;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>ตรวจสอบข้อมูลคำขอเบิกเงิน</h2>
+  <div class="info-box" id="infoBox">
+    <!-- ข้อมูลจะแสดงที่นี่ -->
+  </div>
+
+<div class="button-group">
+  <button class="button confirm-btn" onclick="confirmSubmit()">Print</button>
+  <button class="button edit-btn" onclick="goBack()">ยืนยัน</button>
+</div>
+
+  <script>
+    function confirmSubmit() {
+    window.print(); // เปิดหน้าพิมพ์
+  }
+
+    function goBack() {
+    window.history.back();
+  }
+    const data = JSON.parse(localStorage.getItem('withdrawData'));
+    const infoBox = document.getElementById('infoBox');
+
+    if (!data) {
+      infoBox.innerHTML = '<p>ไม่พบข้อมูลคำขอเบิก กรุณากรอกฟอร์มใหม่</p>';
+    } else {
+      infoBox.innerHTML = `
+        <p><strong>ชื่อผู้เบิก:</strong> ${data.name}</p>
+        <p><strong>จำนวนเงิน:</strong> ${data.amount} บาท</p>
+        <p><strong>เหตุผลในการเบิก:</strong> ${data.reason}</p>
+      `;
+    }
+
+    document.getElementById('confirmBtn').addEventListener('click', () => {
+      alert('ส่งข้อมูลเรียบร้อยแล้ว ขอบคุณค่ะ');
+      localStorage.removeItem('withdrawData');
+      window.location.href = 'index.html';
+    });
+
+    document.getElementById('editBtn').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+  </script>
+
+</body>
+</html>
